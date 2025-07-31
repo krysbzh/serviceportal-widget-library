@@ -2,271 +2,197 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Galerie d'Images</title>
+  <title>Galerie GitHub</title>
   <style>
     body {
       font-family: sans-serif;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      background: #f5f5f5;
       padding: 20px;
     }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    .gallery a {
+      text-decoration: none;
+      color: inherit;
+    }
     img, video {
-      max-width: 300px;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      background: white;
+    }
+    video {
       max-height: 200px;
-      object-fit: cover;
-      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
+  <h1>Galerie des widgets</h1>
+  <div class="gallery" id="gallery"></div>
+
   <script>
-    // Liste manuelle des fichiers (à automatiser plus tard si tu veux)
-const files = [
-  "PE Image Drag & Drop.mp4",
-  "approval.png",
-  "hr-case-detail.png",
-  "hr-catalog-list.png",
-  "hr-direct-deposit.png",
-  "hr-employee-next-task.png",
-  "hr-info.png",
-  "hr-new-hire-orientation.png",
-  "hr-office-space.png",
-  "hr-photo-credential.png",
-  "hr-picture-box.png",
-  "hr-read-non-disclosure.png",
-  "hr-select-device.png",
-  "hr-sign-document.png",
-  "hr-simple-list.png",
-  "hr-upcoming-events-collapsed.png",
-  "hr-upcoming-events-expanded.png",
-  "hr-video-carousel.png",
-  "hr-welcome-message.png",
-  "il-hero.jpg",
-  "mf-drag-drop.png",
-  "mf-feature-highlight.png",
-  "mf-logo.png",
-  "mf-navigation.png",
-  "mf-next.png",
-  "mf-screen-progression.png",
-  "mf-screenshot.png",
-  "multiform.svg",
-  "pe-animated-timeline-1.gif",
-  "pe-animated-timeline.png",
-  "pe-appointment-1.png",
-  "pe-appointment-chiclet.png",
-  "pe-appointment-dropdown.png",
-  "pe-appointment-list.png",
-  "pe-appointment-scheduler-01.png",
-  "pe-appointment-scheduler-02.png",
-  "pe-appointment-scheduling-setup1.png",
-  "pe-appointment-timecard.png",
-  "pe-approve-reject-card.png",
-  "pe-approve-reject-inbox.png",
-  "pe-area-chart-modified.png",
-  "pe-area-chart.png",
-  "pe-area-spline-chart-modified.png",
-  "pe-area-spline-chart.png",
-  "pe-background-slideshow.gif",
-  "pe-bar-chart-modified.png",
-  "pe-bar-chart.png",
-  "pe-barcode-reader-fi-01.png",
-  "pe-barcode-reader-fi-02.png",
-  "pe-barcode-reader-fi-03.png",
-  "pe-barcode-reader-fi-04.png",
-  "pe-barcode-reader-live-01.png",
-  "pe-barcode-reader-live-02.png",
-  "pe-barcode-reader-live-03.gif",
-  "pe-blog-dark-theme.png",
-  "pe-blog-light-theme.png",
-  "pe-bootstrap-notify-01.png",
-  "pe-bootstrap-notify-02.png",
-  "pe-business-impact-1a.png",
-  "pe-business-impact-1b.png",
-  "pe-business-impact-2a.png",
-  "pe-business-impact-2b.png",
-  "pe-carousel-plus.png",
-  "pe-circle-of-destiny-2.png",
-  "pe-circle-of-destiny-3.png",
-  "pe-circle-of-destiny.png",
-  "pe-cloud-performance-01.png",
-  "pe-cloud-sprawl-card-utilization-snippet.png",
-  "pe-cloud-sprawl-info-cost-snippet.png",
-  "pe-cloud-sprawl-info-snippet.png",
-  "pe-cloud-sprawl-info-utilization-snippet.png",
-  "pe-cloud-sprawl-info-with-user-snippet.png",
-  "pe-cloud-sprawl-overview-snippet.png",
-  "pe-cod-static.png",
-  "pe-column-chart-modified.png",
-  "pe-column-chart.png",
-  "pe-completion-task-1.png",
-  "pe-completion-task-2.gif",
-  "pe-contact-slider.png",
-  "pe-countdown.png",
-  "pe-csm-case-details.png",
-  "pe-csm-case-row.png",
-  "pe-csm-case-status.png",
-  "pe-csm-cost-breakdown.png",
-  "pe-csm-dashboard-expandable-card.png",
-  "pe-csm-dashboard-tabs.png",
-  "pe-csm-hotfix-dates.png",
-  "pe-csm-location.png",
-  "pe-csm-progressbar.png",
-  "pe-csm-summary.png",
-  "pe-csm-timeline.png",
-  "pe-cta-count.png",
-  "pe-custom-header.png",
-  "pe-custom-overlay.png",
-  "pe-donut-chart-01.png",
-  "pe-donut-chart-modified.png",
-  "pe-donut-chart-wizard-01.png",
-  "pe-dynamic-tabs-widget.png",
-  "pe-emp-exp-modal-header-snippet.png",
-  "pe-emp-exp-services-list.png",
-  "pe-end-user-login-header-1.png",
-  "pe-enduser-catalog.png",
-  "pe-enduser-login.png",
-  "pe-enduser-survey.png",
-  "pe-feedback-buttons.png",
-  "pe-feedback-card-screenshot-01.png",
-  "pe-feedback-card-screenshot-02.png",
-  "pe-feedback-card-screenshot-03.png",
-  "pe-feedback-modal.png",
-  "pe-foexp-401k.png",
-  "pe-foexp-debit-details.gif",
-  "pe-foexp-devices.gif",
-  "pe-foexp-photoupload.gif",
-  "pe-foexp-training.png",
-  "pe-form-formly-01.png",
-  "pe-form-with-related-list.gif",
-  "pe-google-analytics.png",
-  "pe-heatmap-chart.png",
-  "pe-help-cards-1.png",
-  "pe-highchart-donut.png",
-  "pe-homepage-search-with-video-setup.png",
-  "pe-homepage-search-with-video-widgetoptions.png",
-  "pe-homepage-search-with-video.gif",
-  "pe-horizontal-stacked-bar.png",
-  "pe-image-drag-and-drop.gif",
-  "pe-inbox-01.png",
-  "pe-incident-message.png",
-  "pe-incident-timeline-1.png",
-  "pe-incident-timeline-2.png",
-  "pe-inline-editing-data-table.gif",
-  "pe-itbm-business-unit-details-1.png",
-  "pe-itbm-business-unit-details-2.png",
-  "pe-itbm-business-unit-details-3.png",
-  "pe-itbm-interaction-note-confirm.png",
-  "pe-itbm-interaction-note.png",
-  "pe-itbm-organizational-spend-alignment.png",
-  "pe-kb-list-collapsed.png",
-  "pe-kb-list-expanded.png",
-  "pe-line-chart-modified.png",
-  "pe-line-chart.png",
-  "pe-list-menu-expand-collapse-collapsed.png",
-  "pe-list-menu-expand-collapse-option-schema.png",
-  "pe-list-menu-expand-collapse-portal-config.png",
-  "pe-list-menu-expand-collapse.png",
-  "pe-manage-attachments.png",
-  "pe-maps-ngmap-1.png",
-  "pe-maps-ngmap-2.png",
-  "pe-maps-ngmap.gif",
-  "pe-my-jira-issues-basicauth.png",
-  "pe-my-jira-issues-options.png",
-  "pe-my-jira-issues-sys-property.png",
-  "pe-my-jira-issues.png",
-  "pe-news-carousel.gif",
-  "pe-news-list.png",
-  "pe-outcome-feedback.png",
-  "pe-overview-card-snippet.png",
-  "pe-people-info-01.png",
-  "pe-people-info-02.png",
-  "pe-people-info-03.png",
-  "pe-people-info-04.png",
-  "pe-people-info-05.png",
-  "pe-people-info-avatar-border.png",
-  "pe-pie-chart-modified.png",
-  "pe-pie-chart.png",
-  "pe-polar-chart-modified.png",
-  "pe-polar-chart.png",
-  "pe-progressive-form.gif",
-  "pe-push-notification.png",
-  "pe-recommendation-cards-1.png",
-  "pe-related-list.gif",
-  "pe-remediation-actions.png",
-  "pe-report-issue-1.png",
-  "pe-rest-typeahead-search-01.png",
-  "pe-rest-typeahead-search-02.png",
-  "pe-root-cause-1a.png",
-  "pe-root-cause-1b.png",
-  "pe-root-cause-2a.png",
-  "pe-root-cause-2b.png",
-  "pe-solid-gauge-arc-chart-og.png",
-  "pe-solid-gauge-arc-chart.png",
-  "pe-solid-gauge-arc-modified-chart.png",
-  "pe-solid-gauge-chart-og.png",
-  "pe-solid-gauge-chart.png",
-  "pe-solid-gauge-modified-chart.png",
-  "pe-sp-floating-viewport-button.png",
-  "pe-sp-floating-viewport-instance-options.png",
-  "pe-sp-floating-viewport-open.png",
-  "pe-spline-chart-modified.png",
-  "pe-spline-chart.png",
-  "pe-status-alert-1.png",
-  "pe-status-alert-2.png",
-  "pe-status-card-1.png",
-  "pe-status-card-2.png",
-  "pe-status-card-snippet.png",
-  "pe-summary-data-snippet.png",
-  "pe-support-options-1.png",
-  "pe-tab-chart-selector.png",
-  "pe-tab-selection-1.png",
-  "pe-tab-selection-2.png",
-  "pe-tabbed-panel-horizontal.png",
-  "pe-tabbed-panel-vertical-1.png",
-  "pe-tabbed-panel-vertical-2.png",
-  "pe-tabbed-panel-vertical-3.png",
-  "pe-tabs-selector-01.png",
-  "pe-tabs-selector-02.png",
-  "pe-tabs-selector-03.png",
-  "pe-task-carousel.png",
-  "pe-technician-card.png",
-  "pe-tier-overview-snippet.png",
-  "pe-timeline-1.png",
-  "pe-timeline-2.png",
-  "pe-timeline-delivery-info.png",
-  "pe-timeline-emp-exp.png",
-  "pe-timeline-screenshot-02.png",
-  "pe-timeline-screenshot-03.png",
-  "pe-timeline-screenshot-04.png",
-  "pe-timeline-screenshot-05.png",
-  "pe-timeline-screenshot.png",
-  "pe-treemap-chart-modified.png",
-  "pe-treemap-chart.png",
-  "pe-user-login-1.png",
-  "pe-user-request-1.gif",
-  "pe-welcome-user.png",
-  "scratch_pad.png",
-  "sfb-desktop-modal.png",
-  "sfb-desktop.png",
-  "sfb-mobile-modal.png",
-  "sfb-mobile.png"
-];
-
-
     const baseURL = "https://raw.githubusercontent.com/krysbzh/serviceportal-widget-library/master/images/";
+    const githubBase = "https://github.com/krysbzh/serviceportal-widget-library/tree/master/";
+
+    const files = [
+      "PE Image Drag & Drop.mp4",
+      "approval.png",
+      "hr-case-detail.png",
+      "hr-catalog-list.png",
+      "hr-direct-deposit.png",
+      "hr-employee-next-task.png",
+      "hr-info.png",
+      "hr-new-hire-orientation.png",
+      "hr-office-space.png",
+      "hr-photo-credential.png",
+      "hr-picture-box.png",
+      "hr-read-non-disclosure.png",
+      "hr-select-device.png",
+      "hr-sign-document.png",
+      "hr-simple-list.png",
+      "hr-upcoming-events-collapsed.png",
+      "hr-upcoming-events-expanded.png",
+      "hr-video-carousel.png",
+      "hr-welcome-message.png",
+      "il-hero.jpg",
+      "mf-drag-drop.png",
+      "mf-feature-highlight.png",
+      "mf-logo.png",
+      "mf-navigation.png",
+      "mf-next.png",
+      "mf-screen-progression.png",
+      "mf-screenshot.png",
+      "multiform.svg",
+      "pe-user-request-1.gif",
+      "pe-root-cause-1a.png",
+      "pe-feedback-card-screenshot-01.png",
+      "pe-progressive-form.gif",
+      "pe-inline-editing-data-table.gif",
+      "pe-form-with-related-list.gif"
+      // Ajoute ici les autres fichiers que tu veux afficher
+    ];
+
+    const folderMap = {
+      "pe-app-analytics": "pe-app-analytics",
+      "pe-appointment-list": "pe-appointment-list",
+      "pe-appointment-scheduler": "pe-appointment-scheduler",
+      "pe-appointment-scheduling": "pe-appointment-scheduling",
+      "pe-background-slideshow": "pe-background-slideshow",
+      "pe-barcode-reader-fi": "pe-barcode-reader-fi",
+      "pe-barcode-reader-live": "pe-barcode-reader-live",
+      "pe-blog": "pe-blog",
+      "pe-business-impact-details": "pe-business-impact-details",
+      "pe-business-impact": "pe-business-impact",
+      "pe-carousel-plus": "pe-carousel-plus",
+      "pe-circle-of-destiny": "pe-circle-of-destiny",
+      "pe-cloud-performance": "pe-cloud-performance",
+      "pe-cloud-sprawl-card-utilization-snippet": "pe-cloud-sprawl-card-utilization-snippet",
+      "pe-cloud-sprawl-info-cost-snippet": "pe-cloud-sprawl-info-cost-snippet",
+      "pe-cloud-sprawl-info-snippet": "pe-cloud-sprawl-info-snippet",
+      "pe-cloud-sprawl-info-utilization-snippet": "pe-cloud-sprawl-info-utilization-snippet",
+      "pe-cloud-sprawl-info-with-user-snippet": "pe-cloud-sprawl-info-with-user-snippet",
+      "pe-cloud-sprawl-overview-snippet": "pe-cloud-sprawl-overview-snippet",
+      "pe-cod-static": "pe-cod-static",
+      "pe-completion-task": "pe-completion-task",
+      "pe-contact-slider": "pe-contact-slider",
+      "pe-countdown": "pe-countdown",
+      "pe-csm-case-details": "pe-csm-case-details",
+      "pe-csm-case-row": "pe-csm-case-row",
+      "pe-csm-case-status": "pe-csm-case-status",
+      "pe-csm-cost-breakdown": "pe-csm-cost-breakdown",
+      "pe-csm-dashboard-expandable": "pe-csm-dashboard-expandable",
+      "pe-csm-dashboard-tabs": "pe-csm-dashboard-tabs",
+      "pe-csm-hotfix-date": "pe-csm-hotfix-date",
+      "pe-csm-location": "pe-csm-location",
+      "pe-csm-progressbar": "pe-csm-progressbar",
+      "pe-csm-summary": "pe-csm-summary",
+      "pe-cta-count": "pe-cta-count",
+      "pe-custom-header": "pe-custom-header",
+      "pe-custom-overlay": "pe-custom-overlay",
+      "pe-emp-exp-services-list": "pe-emp-exp-services-list-snippet",
+      "pe-enduser-catalog": "pe-enduser-catalog",
+      "pe-enduser-login-header": "pe-enduser-login-header",
+      "pe-enduser-survey": "pe-enduser-survey",
+      "pe-feedback-card": "pe-feedback-card",
+      "pe-foexp-401k": "pe-foexp-401k",
+      "pe-foexp-debit-details": "pe-foexp-debit-details",
+      "pe-foexp-devices": "pe-foexp-devices",
+      "pe-foexp-photoupload": "pe-foexp-photoupload",
+      "pe-foexp-training": "pe-foexp-training",
+      "pe-form-formly": "pe-form-formly",
+      "pe-form-with-related-list": "pe-form-with-related-list",
+      "pe-google-analytics": "pe-google-analytics",
+      "pe-help-cards": "pe-help-cards",
+      "pe-homepage-search-with-video": "pe-homepage-search-with-video",
+      "pe-horizontal-stacked-bar": "pe-horizontal-stacked-bar",
+      "pe-image-drag-and-drop": "pe-image-drag-and-drop",
+      "pe-inline-editing-data-table": "pe-inline-editing-data-table",
+      "pe-itbm-business-unit-details": "pe-itbm-business-unit-details",
+      "pe-itbm-interaction-note": "pe-itbm-interaction-note",
+      "pe-itbm-organizational-spend-alignment": "pe-itbm-organizational-spend-alignment",
+      "pe-kb-list": "pe-kb-list",
+      "pe-list-menu-expand-collapse": "pe-list-menu-expand-collapse",
+      "pe-manage-attachments": "pe-manage-attachments",
+      "pe-maps-ngmap": "pe-maps-ngmap",
+      "pe-multiform": "pe-multiform",
+      "pe-my-jira-issues": "pe-my-jira-issues",
+      "pe-news-carousel": "pe-news-carousel",
+      "pe-news-list": "pe-news-list",
+      "pe-outcome-feedback": "pe-outcome-feedback",
+      "pe-progressive-form": "pe-progressive-form",
+      "pe-push-notification": "pe-push-notification",
+      "pe-recommendation-cards": "pe-recommendation-cards",
+      "pe-related-list": "pe-related-list",
+      "pe-remediation-actions": "pe-remediation-actions",
+      "pe-report-issue": "pe-report-issue",
+      "pe-rest-typeahead-search": "pe-rest-typeahead-search",
+      "pe-root-cause": "pe-root-cause",
+      "pe-root-cause-details": "pe-root-cause-details/widget",
+      "pe-scratch-pad": "pe-scratch-pad",
+      "pe-simplefeedback-styled": "pe-simplefeedback-styled",
+      "pe-simplefeedback": "pe-simplefeedback",
+      "pe-sp-floating-viewport": "pe-sp-floating-viewport",
+      "pe-status-alert": "pe-status-alert",
+      "pe-status-card-snippet": "pe-status-card-snippet",
+      "pe-status-card": "pe-status-card",
+      "pe-support-options": "pe-support-options",
+      "pe-tabbed-panel-horizontal": "pe-tabbed-panel-horizontal",
+      "pe-tabbed-panel-vertical": "pe-tabbed-panel-vertical",
+      "pe-task-carousel": "pe-task-carousel",
+      "pe-user-request": "pe-user-request",
+      "people-card": "people-card"
+    };
+
+    const gallery = document.getElementById("gallery");
 
     files.forEach(file => {
       const ext = file.split('.').pop().toLowerCase();
-      if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-        const img = document.createElement('img');
-        img.src = baseURL + file;
-        document.body.appendChild(img);
+      const name = file.split('/').pop().split('.')[0];
+      const folderKey = Object.keys(folderMap).find(key => name.startsWith(key));
+      const linkHref = folderKey ? githubBase + folderMap[folderKey] : githubBase + "images";
+
+      const mediaURL = baseURL + encodeURIComponent(file);
+      const link = document.createElement("a");
+      link.href = linkHref;
+      link.target = "_blank";
+
+      let media;
+      if (["jpg", "jpeg", "png", "gif", "svg", "webp"].includes(ext)) {
+        media = document.createElement("img");
+        media.src = mediaURL;
       } else if (["mp4", "webm"].includes(ext)) {
-        const video = document.createElement('video');
-        video.src = baseURL + file;
-        video.controls = true;
-        document.body.appendChild(video);
+        media = document.createElement("video");
+        media.src = mediaURL;
+        media.controls = true;
+      }
+
+      if (media) {
+        link.appendChild(media);
+        gallery.appendChild(link);
       }
     });
   </script>
