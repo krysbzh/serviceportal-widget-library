@@ -387,7 +387,7 @@ const files = [
       const name = file.split('/').pop().split('.')[0];
       const folderKey = Object.keys(folderMap).find(key => name.startsWith(key));
       const folderName = folderKey || "images";
-      const linkHref = githubBase + (folderMap[folderKey] || "images");
+      const linkHref = githubBase + (folderMap[folderKey] || "");
 
       const mediaURL = baseURL + encodeURIComponent(file);
 
